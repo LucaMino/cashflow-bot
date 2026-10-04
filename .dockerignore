@@ -1,0 +1,33 @@
+# Secrets (injected via fly secrets at runtime)
+.env
+.env.*
+sa.json
+*-sa.json
+service-account*.json
+credentials*.json
+
+# VCS
+.git
+.gitignore
+
+# Python artifacts
+.venv
+__pycache__
+*.py[cod]
+*.egg-info
+.ruff_cache
+.mypy_cache
+.pytest_cache
+.coverage
+htmlcov
+
+# Not needed in the image
+.claude
+.claudeignore
+.dockerignore
+Dockerfile
+fly.toml
+README.md
+.vscode
+.idea
+.DS_Store

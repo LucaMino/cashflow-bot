@@ -1,0 +1,27 @@
+[project]
+name = "cashflow-bot"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "python-telegram-bot[webhooks]>=21,<22",
+    "litellm>=1.50",
+    "gspread>=6",
+    "pydantic-settings>=2",
+    "python-dotenv>=1",
+    "tzdata",
+    "tenacity>=9.1.4",
+]
+
+[dependency-groups]
+dev = ["ruff", "mypy"]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+src = ["src"]
+line-length = 100
+
+[tool.mypy]
+mypy_path = "src"
+strict = true
