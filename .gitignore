@@ -16,7 +16,6 @@ dist/
 
 # Virtualenv (uv)
 .venv/
-uv.lock
 
 # Tooling caches
 .ruff_cache/

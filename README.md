@@ -4,6 +4,10 @@ A personal Telegram bot that tracks expenses and income in a Google Sheet.
 You write in plain language ("coffee 1.20 and fuel 40", "how much did I spend this month?"),
 an LLM turns the message into structured tool calls, and the bot reads or writes the sheet.
 
+The bot is model-agnostic: it talks to the LLM through [LiteLLM](https://docs.litellm.ai/docs/providers),
+so you can switch provider (Gemini, Claude, OpenAI, a local model, …) by changing `LLM_MODEL`
+and the matching API key in `.env`, with no code changes. The model must support tool calling.
+
 ## How it works
 
 ```mermaid
