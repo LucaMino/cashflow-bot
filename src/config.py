@@ -32,4 +32,5 @@ class Settings(BaseSettings):
     def payment_method_list(self) -> list[str]:
         return [m.strip() for m in self.payment_methods.split(",") if m.strip()]
 
+
 settings = Settings()  # type: ignore[call-arg]

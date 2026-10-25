@@ -49,7 +49,9 @@ PaymentMethod = Annotated[
 
 class TxInput(BaseModel):
     date: IsoDate = Field(description="Date YYYY-MM-DD")
-    amount: float = Field(description="Decimal number with a dot. Negative = expense, positive = income")
+    amount: float = Field(
+        description="Decimal number with a dot. Negative = expense, positive = income"
+    )
     category: Category
     method: PaymentMethod = Field(description="Payment method")
     description: str = Field(description="Short description, e.g. 'coffee'")
@@ -105,15 +107,24 @@ def build_tools(sheet: TransactionSheet) -> dict[str, Tool]:
         return {"total": round(sum(r["amount"] for r in rows), 2), "count": len(rows)}
 
     tools = [
-        Tool("append_transactions",
-             "Record new transactions in the sheet. Use it when the user reports expenses or income.",
-             AppendArgs, append),
-        Tool("query_transactions",
-             f"List the transactions in a period (max {MAX_ROWS}). Use it to see the details.",
-             RangeArgs, query),
-        Tool("sum_transactions",
-             "Sum the amounts in a period, optionally by category. "
-             "ALWAYS use it for totals: never add numbers up yourself.",
-             RangeArgs, total),
+        Tool(
+            "append_transactions",
+            "Record new transactions in the sheet. Use it when the user reports expenses or income.",
+            AppendArgs,
+            append,
+        ),
+        Tool(
+            "query_transactions",
+            f"List the transactions in a period (max {MAX_ROWS}). Use it to see the details.",
+            RangeArgs,
+            query,
+        ),
+        Tool(
+            "sum_transactions",
+            "Sum the amounts in a period, optionally by category. "
+            "ALWAYS use it for totals: never add numbers up yourself.",
+            RangeArgs,
+            total,
+        ),
     ]
     return {t.name: t for t in tools}

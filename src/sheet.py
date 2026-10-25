@@ -7,10 +7,11 @@ import gspread
 # internal keys, in the same order as the columns
 KEYS = ["date", "method", "category", "description", "amount"]
 
-FIRST_COL, LAST_COL = "B", "F"   # <-- adjust: where the table starts and ends
-HEADER_ROW = 1                   # <-- adjust: header row
+FIRST_COL, LAST_COL = "B", "F"  # <-- adjust: where the table starts and ends
+HEADER_ROW = 1  # <-- adjust: header row
 
 SHEETS_EPOCH = date(1899, 12, 30)
+
 
 def _iso(v: Any) -> str:
     # with UNFORMATTED_VALUE, real dates come back as serial numbers

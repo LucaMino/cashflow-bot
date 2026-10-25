@@ -37,9 +37,7 @@ async def on_text(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
     await msg.chat.send_action("typing")
     try:
         # run the LLM in a separate thread to avoid blocking the event loop
-        reply = await asyncio.to_thread(
-            run, msg.text, tools, settings.llm_model, settings.tz
-        )
+        reply = await asyncio.to_thread(run, msg.text, tools, settings.llm_model, settings.tz)
     except Exception:
         log.exception("run failed")
         reply = "Sorry, something went wrong. Try again later."

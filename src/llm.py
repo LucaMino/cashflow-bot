@@ -47,9 +47,11 @@ def run(text: str, tools: dict[str, Tool], model: str, tz: str) -> str:
 
     log.info("user: %r", text)
     for step in range(1, MAX_STEPS + 1):
-        msg = litellm.completion(
-            model=model, messages=msgs, tools=specs, num_retries=3
-        ).choices[0].message
+        msg = (
+            litellm.completion(model=model, messages=msgs, tools=specs, num_retries=3)
+            .choices[0]
+            .message
+        )
 
         if not msg.tool_calls:
             log.info("step %d: reply %r", step, msg.content)
@@ -63,11 +65,13 @@ def run(text: str, tools: dict[str, Tool], model: str, tz: str) -> str:
             result = _execute(tools, call)
             content = json.dumps(result, default=str, ensure_ascii=False)
             log.info("  <- %s: %s", call.function.name, content)
-            msgs.append({
-                "role": "tool",
-                "tool_call_id": call.id,
-                "content": content,
-            })
+            msgs.append(
+                {
+                    "role": "tool",
+                    "tool_call_id": call.id,
+                    "content": content,
+                }
+            )
 
     log.warning("gave up after %d steps", MAX_STEPS)
     return "Sorry, I couldn't handle your request. Please try again with a simpler message."

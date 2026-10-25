@@ -19,6 +19,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name
 logging.getLogger("httpx").setLevel(logging.WARNING)
 logging.getLogger("LiteLLM").setLevel(logging.WARNING)
 
+
 def main() -> None:
     sheet = open_sheet(settings.google_sa_json, settings.sheet_id, settings.sheet_tab)
     app = Application.builder().token(settings.tg_token).build()
@@ -36,12 +37,12 @@ def main() -> None:
         return
 
     app.run_webhook(
-        listen="0.0.0.0", # all interfaces: the reverse proxy reaches the app from outside the container
+        listen="0.0.0.0",  # all interfaces: the reverse proxy reaches the app from outside the container
         port=settings.port,
         url_path="webhook",
         webhook_url=f"{settings.webhook_url.rstrip('/')}/webhook",
         secret_token=settings.tg_webhook_secret,
-        allowed_updates=["message"], # only receive messages, not other updates
+        allowed_updates=["message"],  # only receive messages, not other updates
     )
 
 
