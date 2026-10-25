@@ -1,40 +1,47 @@
-name: CI/CD - Test & Deploy to Render
+name: CI/CD - Lint & Deploy to Render
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  lint-and-test:
+  lint:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v6
         with:
           enable-cache: true
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
+      - name: Install dependencies
+        run: uv sync --locked
 
-      - name: Install Dependencies
-        run: uv sync --frozen --dev
+      - name: Ruff check
+        run: uv run ruff check .
 
-      - name: Run Ruff (Linter & Formatter check)
-        run: |
-          uv run ruff check .
-          uv run ruff format --check .
+      - name: Ruff format check
+        run: uv run ruff format --check .
+
+      # - name: Tests
+      #   run: uv run pytest
 
   deploy:
-    needs: lint-and-test
+    needs: lint
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
-      - name: Trigger Render Deployment
-        run: |
-          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+      - name: Trigger Render deployment
+        run: curl -fsS -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
