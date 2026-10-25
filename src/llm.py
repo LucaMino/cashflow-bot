@@ -80,7 +80,7 @@ def _execute(tools: dict[str, Tool], call) -> object:
         if name not in tools:
             return {"error": f"Unknown tool: {name}"}
         return tools[name].call(args)
-    except Exception as e:  # validation, gspread, etc.: the model can self-correct
+    except Exception as e:  # noqa: BLE001  # validation, gspread, etc.: the model can self-correct
         log.warning("tool %s failed: %s", name, e)
         return {"error": str(e)}
     finally:
