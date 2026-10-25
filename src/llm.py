@@ -3,6 +3,7 @@ import logging
 import time
 import warnings
 from datetime import datetime
+from typing import Any
 from zoneinfo import ZoneInfo
 
 import litellm
@@ -39,7 +40,7 @@ def system_prompt(tz: str) -> str:
 
 
 def run(text: str, tools: dict[str, Tool], model: str, tz: str) -> str:
-    msgs: list = [
+    msgs: list[Any] = [
         {"role": "system", "content": system_prompt(tz)},
         {"role": "user", "content": text},
     ]
@@ -77,7 +78,7 @@ def run(text: str, tools: dict[str, Tool], model: str, tz: str) -> str:
     return "Sorry, I couldn't handle your request. Please try again with a simpler message."
 
 
-def _execute(tools: dict[str, Tool], call) -> object:
+def _execute(tools: dict[str, Tool], call: Any) -> object:
     name, args = call.function.name, call.function.arguments
     start = time.monotonic()
     try:

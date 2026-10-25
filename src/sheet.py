@@ -3,6 +3,7 @@ from datetime import date, timedelta
 from typing import Any
 
 import gspread
+from gspread.utils import ValueInputOption, ValueRenderOption
 
 # internal keys, in the same order as the columns
 KEYS = ["date", "method", "category", "description", "amount"]
@@ -28,7 +29,7 @@ class TransactionSheet:
         values = [[r.get(k, "") for k in KEYS] for r in rows]
         self.ws.append_rows(
             values,
-            value_input_option="USER_ENTERED",
+            value_input_option=ValueInputOption.user_entered,
             table_range=f"{FIRST_COL}{HEADER_ROW}",
         )
         return len(values)
@@ -38,7 +39,7 @@ class TransactionSheet:
     ) -> list[dict[str, Any]]:
         raw = self.ws.get(
             f"{FIRST_COL}{HEADER_ROW}:{LAST_COL}",
-            value_render_option="UNFORMATTED_VALUE",
+            value_render_option=ValueRenderOption.unformatted,
         )
         records = []
         for r in raw[1:]:
