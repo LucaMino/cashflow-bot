@@ -36,7 +36,7 @@ def main() -> None:
         return
 
     app.run_webhook(
-        listen="0.0.0.0", # all interfaces: Fly's proxy reaches the app from outside the container
+        listen="0.0.0.0", # all interfaces: the reverse proxy reaches the app from outside the container
         port=settings.port,
         url_path="webhook",
         webhook_url=f"{settings.webhook_url.rstrip('/')}/webhook",

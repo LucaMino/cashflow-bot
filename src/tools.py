@@ -1,7 +1,7 @@
-import json
+from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import date
-from typing import Annotated, Any, Callable
+from typing import Annotated, Any
 
 from pydantic import AfterValidator, BaseModel, Field, WithJsonSchema
 
