@@ -9,7 +9,7 @@ import sys
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters
 
-from config import settings
+from config import Settings
 from handlers import on_start, on_text
 from sheet import open_sheet
 from tools import build_tools
@@ -21,9 +21,11 @@ logging.getLogger("LiteLLM").setLevel(logging.WARNING)
 
 
 def main() -> None:
+    settings = Settings()  # type: ignore[call-arg]
     sheet = open_sheet(settings.google_sa_json, settings.sheet_id, settings.sheet_tab)
     app = Application.builder().token(settings.tg_token).build()
-    app.bot_data["tools"] = build_tools(sheet)
+    app.bot_data["settings"] = settings
+    app.bot_data["tools"] = build_tools(sheet, settings.category_list, settings.payment_method_list)
 
     # only allow the bot to be used in private chat by the allowed users
     only_me = filters.User(user_id=settings.allowed_ids) & filters.ChatType.PRIVATE

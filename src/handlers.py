@@ -4,7 +4,7 @@ import logging
 from telegram import Update
 from telegram.ext import ContextTypes
 
-from config import settings
+from config import Settings
 from llm import run
 
 log = logging.getLogger(__name__)
@@ -31,7 +31,8 @@ async def on_text(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.message
     if msg is None or msg.text is None:
         return
-    # get the tools from the bot_data
+    # get settings and tools from the bot_data
+    settings: Settings = ctx.application.bot_data["settings"]
     tools = ctx.application.bot_data["tools"]
     # show typing action while processing the request
     await msg.chat.send_action("typing")
