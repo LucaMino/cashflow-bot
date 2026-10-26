@@ -37,8 +37,8 @@ jobs:
       - name: Mypy
         run: uv run mypy src
 
-      # - name: Tests
-      #   run: uv run pytest
+      - name: Tests
+        run: uv run pytest
 
   deploy:
     needs: lint
