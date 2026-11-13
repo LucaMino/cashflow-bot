@@ -42,9 +42,9 @@ sequenceDiagram
 3. **Ask the LLM.** The message is sent together with a system prompt (today's date and
    timezone, so "yesterday" can be resolved) and the JSON schemas of the available tools.
 4. **Tool loop.** If the LLM asks for a tool, the bot validates the arguments with Pydantic
-   (ISO date, known category), runs it against the sheet and sends the result back. Errors
-   are sent back too, so the LLM can correct itself. The loop stops when the LLM answers
-   without tool calls, or after `MAX_STEPS` iterations.
+   (ISO date, known category and payment method), runs it against the sheet and sends the
+   result back. Errors are sent back too, so the LLM can correct itself. The loop stops when
+   the LLM answers without tool calls, or after `MAX_STEPS` iterations.
 5. **Reply.** The final answer is sent back to the chat.
 
 ### Tools
@@ -65,6 +65,9 @@ The table lives in columns **B–F** with the header in row **1**:
 |---|---|---|---|---|
 | date | payment method | category | description | amount |
 
+Allowed values for `category` and `payment method` are configured via `CATEGORIES` and
+`PAYMENT_METHODS` in `.env` (`PAYMENT_METHODS` must include `Contanti`, used as default when
+none is specified).
 
 To use a different range, change `FIRST_COL`, `LAST_COL` and `HEADER_ROW` in `src/sheet.py`.
 
@@ -88,3 +91,15 @@ Or with Docker:
 docker build -t cashflow-bot .
 docker run --rm --env-file .env cashflow-bot python src/main.py poll
 ```
+
+## Development
+
+Run linter, type checker and tests:
+
+```bash
+uv run ruff check .
+uv run ruff format --check .
+uv run mypy src
+uv run pytest
+```
+
